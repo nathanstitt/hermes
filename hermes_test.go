@@ -1,6 +1,7 @@
 package hermes
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -99,7 +100,6 @@ func (ed *SimpleExample) getExample() (Hermes, Email) {
 }
 
 func (ed *SimpleExample) assertHTMLContent(t *testing.T, r string) {
-
 	// Assert on product
 	assert.Contains(t, r, "HermesName", "Product: Should find the name of the product in email")
 	assert.Contains(t, r, "http://hermes-link.com", "Product: Should find the link of the product in email")
@@ -122,6 +122,8 @@ func (ed *SimpleExample) assertHTMLContent(t *testing.T, r string) {
 }
 
 func (ed *SimpleExample) assertPlainTextContent(t *testing.T, r string) {
+	_, email := ed.getExample()
+	t.Log(fmt.Sprintf("EMAIL: %v", email))
 
 	// Assert on product
 	assert.Contains(t, r, "HermesName", "Product: Should find the name of the product in email")
@@ -241,7 +243,8 @@ func (ed *WithSignatureDifferentThanDefault) getExample() (Hermes, Email) {
 	return h, email
 }
 
-func (ed *WithSignatureDifferentThanDefault) assertHTMLContent(t *testing.T, r string) {
+
+func (ed *WithEmptySignature) assertHTMLContent(t *testing.T, r string) {
 	assert.NotContains(t, r, "Yours truly", "Should not find signature with 'Yours truly' which is default")
 	assert.Contains(t, r, "Best regards", "Should have greeting with Dear")
 }
@@ -431,7 +434,7 @@ func checkExample(t *testing.T, ex Example) {
 
 	// When generating HTML template
 	r, err := h.GenerateHTML(email)
-	t.Log(r)
+//	t.Log(r)
 	assert.Nil(t, err)
 	assert.NotEmpty(t, r)
 
@@ -440,7 +443,7 @@ func checkExample(t *testing.T, ex Example) {
 
 	// When generating plain text template
 	r, err = h.GeneratePlainText(email)
-	t.Log(r)
+	//t.Log(r)
 	assert.Nil(t, err)
 	assert.NotEmpty(t, r)
 

@@ -348,6 +348,9 @@ style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0;"
     {{ end }}
   {{ end }}
 
+<!-- MAINBODY -->
+    {{ end }}
+
     {{ with .Email.Body.Outros }}
       {{ if gt (len .) 0 }}
         {{ range $line := . }}
@@ -357,16 +360,13 @@ style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0;"
 		padding-left: 6.25%; padding-right: 6.25%; width: 87.5%; font-size: 17px; font-weight: 400; line-height: 160%;
 			padding-top: 25px;
 			color: #000000;
-			font-family: sans-serif;" class="paragraph">
+			font-family: sans-serif;" class="paragraph outro">
              {{ $line }}
 		</td>
 	</tr>
         {{ end }}
       {{ end }}
     {{ end }}
-<!-- MAINBODY -->
-    {{ end }}
-
 <!-- End of WRAPPER -->
 </table>
 
@@ -398,7 +398,7 @@ style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0;"
                                 {{ end }}
                               {{ end }}
                       {{ end }}
-                    {{ end }}
+                    {{ end }}										
     {{ if (ne .Email.Body.Unsubscribe.URL "") }}
 	<tr>
 		<td align="center" valign="top" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0;
@@ -422,7 +422,15 @@ style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0;"
 
 <!-- End of SECTION / BACKGROUND -->
 </td></tr></table>
+<p>
+{{ if (ne .Email.Body.Signature "") }}
+	{{.Email.Body.Signature}},
+{{ end }}
+<br />
+{{.Hermes.Product.Name}}
+</p>
 
+<p>{{.Hermes.Product.Copyright}}</p>
 </body>
 </html>
 `
@@ -496,9 +504,18 @@ const textTemplate = `# {{if .Email.Body.Title }}{{ .Email.Body.Title }}{{ else 
     <p>{{ $line }}<p>
   {{ end }}
 {{ end }}
-<p>{{.Email.Body.Signature}},<br>{{.Hermes.Product.Name}} - {{.Hermes.Product.Link}}</p>
 
-<p>{{.Hermes.Product.Copyright}}</p>
+<p>
+{{ if (ne .Email.Body.Signature "") }}
+	{{.Email.Body.Signature}},
+{{ end }}
+<br />
+{{.Hermes.Product.Name}}
+</p>
+
+<p>
+{{.Hermes.Product.Copyright}} {{.Hermes.Product.Name}} - {{.Hermes.Product.Link}}
+</p>
 `
 
 // HTMLTemplate returns a Golang template that will
