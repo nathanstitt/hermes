@@ -246,12 +246,12 @@ func (ed *WithSignatureDifferentThanDefault) getExample() (Hermes, Email) {
 
 func (ed *WithSignatureDifferentThanDefault) assertHTMLContent(t *testing.T, r string) {
 	assert.NotContains(t, r, "Yours truly", "Should not find signature with 'Yours truly' which is default")
-	assert.Contains(t, r, "Best regards", "Should have greeting with Dear")
+	assert.Contains(t, r, "Best regards,", "Should have custom signature")
 }
 
 func (ed *WithSignatureDifferentThanDefault) assertPlainTextContent(t *testing.T, r string) {
 	assert.NotContains(t, r, "Yours truly", "Should not find signature with 'Yours truly' which is default")
-	assert.Contains(t, r, "Best regards", "Should have greeting with Dear")
+	assert.Contains(t, r, "Best regards", "Should have custom signature")
 }
 
 type WithInviteCode struct {

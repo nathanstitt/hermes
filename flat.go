@@ -445,7 +445,7 @@ func (dt *Flat) HTMLTemplate() string {
                       {{ end }}
 
                     <p>
-                      {{ if (ne .Email.Body.Signature "") }}
+                      {{ if (ne .Email.Body.Signature " ") }}
                         {{.Email.Body.Signature}},
                       {{ end }}
                       <br />
@@ -558,7 +558,7 @@ func (dt *Flat) PlainTextTemplate() string {
   {{ end }}
 {{ end }}
 <p>
-{{ if (ne .Email.Body.Signature "") }}
+{{ if (ne .Email.Body.Signature " ") }}
 {{.Email.Body.Signature}},
 {{ end }}
 <br>{{.Hermes.Product.Name}} - {{.Hermes.Product.Link}}</p>

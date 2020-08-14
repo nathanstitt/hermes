@@ -423,7 +423,7 @@ style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0;"
 <!-- End of SECTION / BACKGROUND -->
 </td></tr></table>
 <p>
-{{ if (ne .Email.Body.Signature "") }}
+{{ if (ne .Email.Body.Signature " ") }}
 	{{.Email.Body.Signature}},
 {{ end }}
 <br />
@@ -506,7 +506,7 @@ const textTemplate = `# {{if .Email.Body.Title }}{{ .Email.Body.Title }}{{ else 
 {{ end }}
 
 <p>
-{{ if (ne .Email.Body.Signature "") }}
+{{ if (ne .Email.Body.Signature " ") }}
 	{{.Email.Body.Signature}},
 {{ end }}
 <br />
