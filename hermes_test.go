@@ -2,6 +2,7 @@ package hermes
 
 import (
 	"fmt"
+	"github.com/russross/blackfriday/v2"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -303,6 +304,9 @@ func (ed *WithFreeMarkdownContent) getExample() (Hermes, Email) {
 			Link: "http://hermes.com",
 		},
 		DisableCSSInlining: true,
+		MarkdownOption: blackfriday.WithExtensions(
+			blackfriday.HardLineBreak | blackfriday.CommonExtensions,
+		),
 	}
 
 	email := Email{
@@ -323,6 +327,8 @@ Services will be unavailable based on the following schedule:
 
 Feel free to contact us for any question regarding this matter at [support@hermes-example.com](mailto:support@hermes-example.com) or in our [Gitter](https://gitter.im/)
 
+LineOne
+LineTwo
 `,
 			Intros: []string{
 				"An intro that should be kept even with FreeMarkdown",
@@ -366,6 +372,7 @@ func (ed *WithFreeMarkdownContent) assertHTMLContent(t *testing.T, r string) {
 	assert.Contains(t, r, "<a href=\"mailto:support@hermes-example.com\">support@hermes-example.com</a>", "Should find link of mailto as HTML formatted content")
 	assert.Contains(t, r, "An intro that should be kept even with FreeMarkdown", "Should find intro even with FreeMarkdown")
 	assert.Contains(t, r, "An outro that should be kept even with FreeMarkdown", "Should find outro even with FreeMarkdown")
+	assert.Contains(t, r, "<p>LineOne<br />\nLineTwo</p>", "Should separate with line break")
 	assert.NotContains(t, r, "should not be displayed", "Should find any other content that the one from FreeMarkdown object")
 }
 
@@ -495,6 +502,7 @@ func TestHermes_TextDirectionAsDefault(t *testing.T) {
 
 func TestHermes_Default(t *testing.T) {
 	h := Hermes{}
+
 	setDefaultHermesValues(&h)
 	email := Email{}
 	setDefaultEmailValues(&email)

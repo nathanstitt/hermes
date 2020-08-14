@@ -137,7 +137,7 @@ style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0;"
     {{ end }}
 
     {{ if (ne .Email.Body.FreeMarkdown "") }}
-      {{ .Email.Body.FreeMarkdown.ToHTML }}
+      {{ markdownHTML .Email.Body.FreeMarkdown }}
     {{ else }}
     {{ if (ne .Email.Body.Hero.URL "") }}
 	<!-- HERO IMAGE -->
@@ -442,7 +442,7 @@ const textTemplate = `# {{if .Email.Body.Title }}{{ .Email.Body.Title }}{{ else 
   {{ end }}
 {{ end }}
 {{ if (ne .Email.Body.FreeMarkdown "") }}
-  {{ .Email.Body.FreeMarkdown.ToHTML }}
+  {{ markdownHTML .Email.Body.FreeMarkdown }}
 {{ else }}
   {{ with .Email.Body.Dictionary }}
     <ul>

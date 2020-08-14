@@ -308,7 +308,7 @@ func (dt *Flat) HTMLTemplate() string {
                         {{ end }}
                     {{ end }}
                     {{ if (ne .Email.Body.FreeMarkdown "") }}
-                      {{ .Email.Body.FreeMarkdown.ToHTML }}
+                      {{ markdownHTML .Email.Body.FreeMarkdown }}
                     {{ else }}
 
                       {{ with .Email.Body.Dictionary }} 
@@ -506,7 +506,7 @@ func (dt *Flat) PlainTextTemplate() string {
   {{ end }}
 {{ end }}
 {{ if (ne .Email.Body.FreeMarkdown "") }}
-  {{ .Email.Body.FreeMarkdown.ToHTML }}
+  {{ markdownHTML .Email.Body.FreeMarkdown }}
 {{ else }}
   {{ with .Email.Body.Dictionary }}
     <ul>

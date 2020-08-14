@@ -3,7 +3,6 @@ package hermes
 import (
 	"bytes"
 	"html/template"
-
 	"github.com/Masterminds/sprig"
 	"github.com/imdario/mergo"
 	"github.com/jaytaylor/html2text"
@@ -17,6 +16,7 @@ type Hermes struct {
 	TextDirection      TextDirection
 	Product            Product
 	DisableCSSInlining bool
+	MarkdownOption     blackfriday.Option
 }
 
 // Theme is an interface to implement when creating a new theme
@@ -62,6 +62,7 @@ type Email struct {
 // https://en.wikipedia.org/wiki/Markdown
 type Markdown template.HTML
 
+
 // Body is the body of the email, containing all interesting data
 type Body struct {
 	Name         string    // The name of the contacted person
@@ -79,10 +80,6 @@ type Body struct {
 	Unsubscribe  Unsubscribe
 }
 
-// ToHTML converts Markdown to HTML
-func (c Markdown) ToHTML() template.HTML {
-	return template.HTML(blackfriday.Run([]byte(string(c))))
-}
 
 // Entry is a simple entry of a map
 // Allows using a slice of entries instead of a map
@@ -209,6 +206,7 @@ func (h *Hermes) GeneratePlainText(email Email) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
 	return html2text.FromString(template, html2text.Options{PrettyTables: true})
 }
 
@@ -221,9 +219,21 @@ func (h *Hermes) generateTemplate(email Email, tplt string) (string, error) {
 
 	// Generate the email from Golang template
 	// Allow usage of simple function from sprig : https://github.com/Masterminds/sprig
-	t, err := template.New("hermes").Funcs(sprig.FuncMap()).Funcs(templateFuncs).Funcs(template.FuncMap{
-		"safe": func(s string) template.HTML { return template.HTML(s) }, // Used for keeping comments in generated template
-	}).Parse(tplt)
+	t, err := template.New("hermes").Funcs(
+		sprig.FuncMap()).Funcs(templateFuncs).Funcs(
+		template.FuncMap{
+			"safe": func(s string) template.HTML { return template.HTML(s) }, // Used for keeping comments in generated template
+			"markdownHTML": func(md Markdown) template.HTML {
+				if h.MarkdownOption != nil {
+					return template.HTML(blackfriday.Run(
+						[]byte(md),
+						h.MarkdownOption,
+					))
+				}
+				return template.HTML(blackfriday.Run([]byte(md)))
+			},
+		},
+	).Parse(tplt)
 	if err != nil {
 		return "", err
 	}
